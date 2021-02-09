@@ -26,7 +26,7 @@ class Views {
 
   // FLTK widgets for about display
   Fl_Window* aboutWindow = new Fl_Window(300, 140);
-  Fl_Box* aboutTitleBox = new Fl_Box(10, 10, 280, 40, PROGRAM_TITLE);
+  Fl_Box* aboutTitleBox = new Fl_Box(10, 10, 280, 40);
   Fl_Box* aboutInfoBox = new Fl_Box(10, 50, 280, 80);
 
   // FLTK widgets for main display
@@ -145,9 +145,11 @@ class Views {
   static void cbAbout(Fl_Widget* widget, void* viewsObjRef) {
     std::string aboutTitleText = "About ";
     aboutTitleText.insert(aboutTitleText.length(), PROGRAM_TITLE);
-    aboutTitleText.insert(aboutTitleText.length(), " v");
-    aboutTitleText.insert(aboutTitleText.length(), PROGRAM_VERSION);
     ((Views*) viewsObjRef)->aboutWindow->label(aboutTitleText.c_str());
+    std::string aboutTitleBoxText = PROGRAM_TITLE;
+    aboutTitleBoxText.insert(aboutTitleBoxText.length(), " v");
+    aboutTitleBoxText.insert(aboutTitleBoxText.length(), PROGRAM_VERSION);
+    ((Views*) viewsObjRef)->aboutTitleBox->copy_label(aboutTitleBoxText);
     ((Views*) viewsObjRef)->aboutTitleBox->labelsize(20);
     ((Views*) viewsObjRef)->aboutTitleBox->labelfont(FL_BOLD + FL_ITALIC);
     std::string aboutInfoBoxString = "(c) ";

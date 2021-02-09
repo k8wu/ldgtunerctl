@@ -147,7 +147,7 @@ class Views {
     aboutTitleText.insert(aboutTitleText.length(), PROGRAM_TITLE);
     aboutTitleText.insert(aboutTitleText.length(), " v");
     aboutTitleText.insert(aboutTitleText.length(), PROGRAM_VERSION);
-    ((Views*) viewsObjRef)->aboutWindow->label(aboutTitleText);
+    ((Views*) viewsObjRef)->aboutWindow->label(aboutTitleText.c_str());
     ((Views*) viewsObjRef)->aboutTitleBox->labelsize(20);
     ((Views*) viewsObjRef)->aboutTitleBox->labelfont(FL_BOLD + FL_ITALIC);
     std::string aboutInfoBoxString = "(c) ";
@@ -156,7 +156,7 @@ class Views {
     aboutInfoBoxString.insert(aboutInfoBoxString.length(), PROGRAM_AUTHOR_CALLSIGN);
     aboutInfoBoxString.insert(aboutInfoBoxString.length(), "\n");
     aboutInfoBoxString.insert(aboutInfoBoxString.length(), PROGRAM_AUTHOR_EMAIL);
-    ((Views*) viewsObjRef)->aboutInfoBox->title(aboutInfoBoxString);
+    ((Views*) viewsObjRef)->aboutInfoBox->title(aboutInfoBoxString.c_str());
     ((Views*) viewsObjRef)->aboutInfoBox->labelsize(16);
     ((Views*) viewsObjRef)->aboutWindow->show();
   }

@@ -6,7 +6,9 @@ This program will control several aspects of the LDG AT-1000ProII and AT-600ProI
 
 The reason for this program's existence is that LDG offers a Windows executable for controlling the tuner, but has nothing similar available for Linux or any other operating system. Some amateur radio operators (myself included) use Linux primarily in the shack, so now we don't have to resort to running Wine or some other stopgap solution.
 
-This program is built on C++ using FLTK. It should build using **gcc** (`g++`), **clang** (`clang++`), or any other C++11 compliant compiler on Linux. It is known to work on at least a Raspberry Pi 4 (which was the main development system), and should work on the Pi 2 and Pi 3 as well. It may also work on BSD-based systems; however, testing on i.e. FreeBSD, OpenBSD, or macOS has not yet been performed.
+This program is built on C++ using FLTK. It should build using **gcc** (`g++`), **clang** (`clang++`), or any other C++11 compliant compiler on Linux. It is known to work on at least a Raspberry Pi 4 (which was the main development system), and should work on the Pi 2 and Pi 3 as well. Raspbian was tested, but it should work on any reasonably modern Linux system.
+
+As for other operating systems: The program compiles on macOS if the `--std=c++11` flag is passed to `clang++`, but serial port selection does not function well on that platform, and it has not been tested beyond that. There has been no testing at all yet on FreeBSD, OpenBSD, or any other OS.
 
 ## Hardware
 

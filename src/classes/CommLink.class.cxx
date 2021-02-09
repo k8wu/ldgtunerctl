@@ -71,8 +71,8 @@ std::vector<std::string> CommLink::enumerateDevices() {
         std::string realDeviceName = "/dev/";
         realDeviceName.insert(realDeviceName.length(), ent->d_name);
 
-        // try to open this device and get termios from it
-        int potentialSerialPort = open(realDeviceName.c_str(), O_RDWR);
+        // try to open this device and get termios (nonblock because macOS hangs otherwise)
+        int potentialSerialPort = open(realDeviceName.c_str(), O_RDWR | O_NONBLOCK);
         if(potentialSerialPort >= 0) {
           struct termios tty;
           if(tcgetattr(potentialSerialPort, &tty) == 0) {

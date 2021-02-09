@@ -8,6 +8,10 @@ The reason for this program's existence is that LDG offers a Windows executable 
 
 This program is built on C++ using FLTK. It should build using **gcc** (`g++`), **clang** (`clang++`), or any other C++11 compliant compiler on Linux. It is known to work on at least a Raspberry Pi 4 (which was the main development system), and should work on the Pi 2 and Pi 3 as well. It may also work on BSD-based systems; however, testing on i.e. FreeBSD, OpenBSD, or macOS has not yet been performed.
 
+## Hardware
+
+Aside from the tuner itself, an FTDI interface cable is required. Details can be found in this PDF file on LDG's website: [USB Tuner Cable Info](https://ldgelectronics.com/wp-content/uploads/2019/06/USB-Tuner-Cable-Info.pdf)
+
 
 ## Compilation
 
@@ -16,9 +20,9 @@ This program is built on C++ using FLTK. It should build using **gcc** (`g++`), 
 
 This program has not yet been shoehorned into `autoconf`, `cmake`, or any other such system yet. That day is coming, but for now, the following commands should get it built after either cloning or extracting the source:
 > cd ldgtunerctl # or whatever your source directory is named
-> 
+>
 > g++ -Wall -o ldgtunerctl $(fltk-config --cxxflags) $(fltk-config --ldflags) src/classes/*.cxx src/main.cxx
-> 
+>
 > sudo install -m 755 ldgtunerctl /usr/local/bin/ldgtunerctl # change path if you don't want to use /usr/local/bin
 
 ## Running the program

@@ -24,6 +24,11 @@ class Views {
   Fl_Button* serialPortChooseButton = new Fl_Button(20, 170, 120, 40, "Choose Port");
   Fl_Button* serialPortQuitButton = new Fl_Button(20, 220, 120, 40, "Quit");
 
+  // FLTK widgets for about display
+  Fl_Window* aboutWindow = new Fl_Window(300, 140, aboutTitleText.c_str());
+  Fl_Box* aboutTitleBox = new Fl_Box(10, 10, 280, 40, PROGRAM_TITLE);
+  Fl_Box* aboutInfoBox = new Fl_Box(10, 50, 280, 80, aboutInfoBoxString.c_str());
+
   // FLTK widgets for main display
   Fl_Window* mainWindow = new Fl_Window(680, 400);
   Fl_Box* mainTitleBox = new Fl_Box(40, 10, 600, 40, PROGRAM_TITLE);
@@ -142,8 +147,6 @@ class Views {
     aboutTitleText.insert(aboutTitleText.length(), PROGRAM_TITLE);
     aboutTitleText.insert(aboutTitleText.length(), " v");
     aboutTitleText.insert(aboutTitleText.length(), PROGRAM_VERSION);
-    Fl_Window* aboutWindow = new Fl_Window(300, 140, aboutTitleText.c_str());
-    Fl_Box* aboutTitleBox = new Fl_Box(10, 10, 280, 40, PROGRAM_TITLE);
     aboutTitleBox->labelsize(20);
     aboutTitleBox->labelfont(FL_BOLD + FL_ITALIC);
     std::string aboutInfoBoxString = "(c) ";
@@ -152,7 +155,6 @@ class Views {
     aboutInfoBoxString.insert(aboutInfoBoxString.length(), PROGRAM_AUTHOR_CALLSIGN);
     aboutInfoBoxString.insert(aboutInfoBoxString.length(), "\n");
     aboutInfoBoxString.insert(aboutInfoBoxString.length(), PROGRAM_AUTHOR_EMAIL);
-    Fl_Box* aboutInfoBox = new Fl_Box(10, 50, 280, 80, aboutInfoBoxString.c_str());
     aboutInfoBox->labelsize(16);
     aboutWindow->show();
   }

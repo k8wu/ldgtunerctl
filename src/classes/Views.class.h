@@ -22,7 +22,7 @@ class Views {
   Fl_Button* serialPortChooseButton = new Fl_Button(20, 170, 120, 40, "Choose Port");
   Fl_Button* serialPortQuitButton = new Fl_Button(20, 220, 120, 40, "Quit");
   Fl_Window* aboutWindow = new Fl_Window(300, 140);
-  Fl_Box* aboutTitleBox = new Fl_Box(10, 10, 280, 40, PROGRAM_TITLE);
+  Fl_Box* aboutTitleBox = new Fl_Box(10, 10, 280, 40);
   Fl_Box* aboutInfoBox = new Fl_Box(10, 50, 280, 80);
   Fl_Window* mainWindow = new Fl_Window(680, 400);
   Fl_Box* mainTitleBox = new Fl_Box(40, 10, 600, 40, PROGRAM_TITLE);

@@ -147,7 +147,7 @@ class Views {
     aboutTitleText.insert(aboutTitleText.length(), PROGRAM_TITLE);
     ((Views*) viewsObjRef)->aboutWindow->label(aboutTitleText.c_str());
     std::string aboutTitleBoxText = PROGRAM_TITLE;
-    aboutTitleBoxText.insert(aboutTitleBoxText.length(), " v");
+    aboutTitleBoxText.insert(aboutTitleBoxText.length(), "\nv");
     aboutTitleBoxText.insert(aboutTitleBoxText.length(), PROGRAM_VERSION);
     ((Views*) viewsObjRef)->aboutTitleBox->copy_label(aboutTitleBoxText.c_str());
     ((Views*) viewsObjRef)->aboutTitleBox->labelsize(20);

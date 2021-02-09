@@ -147,18 +147,18 @@ class Views {
     aboutTitleText.insert(aboutTitleText.length(), PROGRAM_TITLE);
     aboutTitleText.insert(aboutTitleText.length(), " v");
     aboutTitleText.insert(aboutTitleText.length(), PROGRAM_VERSION);
-    aboutWindow->label(aboutTitleText);
-    aboutTitleBox->labelsize(20);
-    aboutTitleBox->labelfont(FL_BOLD + FL_ITALIC);
+    ((Views*) viewsObjRef)->aboutWindow->label(aboutTitleText);
+    ((Views*) viewsObjRef)->aboutTitleBox->labelsize(20);
+    ((Views*) viewsObjRef)->aboutTitleBox->labelfont(FL_BOLD + FL_ITALIC);
     std::string aboutInfoBoxString = "(c) ";
     aboutInfoBoxString.insert(aboutInfoBoxString.length(), PROGRAM_AUTHOR);
     aboutInfoBoxString.insert(aboutInfoBoxString.length(), ", ");
     aboutInfoBoxString.insert(aboutInfoBoxString.length(), PROGRAM_AUTHOR_CALLSIGN);
     aboutInfoBoxString.insert(aboutInfoBoxString.length(), "\n");
     aboutInfoBoxString.insert(aboutInfoBoxString.length(), PROGRAM_AUTHOR_EMAIL);
-    aboutInfoBox->title(aboutInfoBoxString);
-    aboutInfoBox->labelsize(16);
-    aboutWindow->show();
+    ((Views*) viewsObjRef)->aboutInfoBox->title(aboutInfoBoxString);
+    ((Views*) viewsObjRef)->aboutInfoBox->labelsize(16);
+    ((Views*) viewsObjRef)->aboutWindow->show();
   }
 
   static void cbExitProgram(Fl_Widget* widget, void* viewsObjRef) {

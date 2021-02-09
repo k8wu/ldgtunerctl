@@ -149,7 +149,7 @@ class Views {
     std::string aboutTitleBoxText = PROGRAM_TITLE;
     aboutTitleBoxText.insert(aboutTitleBoxText.length(), " v");
     aboutTitleBoxText.insert(aboutTitleBoxText.length(), PROGRAM_VERSION);
-    ((Views*) viewsObjRef)->aboutTitleBox->copy_label(aboutTitleBoxText);
+    ((Views*) viewsObjRef)->aboutTitleBox->copy_label(aboutTitleBoxText.c_str());
     ((Views*) viewsObjRef)->aboutTitleBox->labelsize(20);
     ((Views*) viewsObjRef)->aboutTitleBox->labelfont(FL_BOLD + FL_ITALIC);
     std::string aboutInfoBoxString = "(c) ";

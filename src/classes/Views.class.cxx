@@ -156,7 +156,7 @@ class Views {
     aboutInfoBoxString.insert(aboutInfoBoxString.length(), PROGRAM_AUTHOR_CALLSIGN);
     aboutInfoBoxString.insert(aboutInfoBoxString.length(), "\n");
     aboutInfoBoxString.insert(aboutInfoBoxString.length(), PROGRAM_AUTHOR_EMAIL);
-    ((Views*) viewsObjRef)->aboutInfoBox->label(aboutInfoBoxString.c_str());
+    ((Views*) viewsObjRef)->aboutInfoBox->copy_label(aboutInfoBoxString.c_str());
     ((Views*) viewsObjRef)->aboutInfoBox->labelsize(16);
     ((Views*) viewsObjRef)->aboutWindow->show();
   }

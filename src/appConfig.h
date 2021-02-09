@@ -9,6 +9,6 @@
 #define PROGRAM_VERSION "0.0.1-dev"
 #define PROGRAM_AUTHOR "Mike Phipps"
 #define PROGRAM_AUTHOR_CALLSIGN "K8WU"
-#define PROGRAM_AUTHOR_EMAIL "qrz@k8wu.me"
+#define PROGRAM_AUTHOR_EMAIL "qrz(at)k8wu.me"
 
 #endif

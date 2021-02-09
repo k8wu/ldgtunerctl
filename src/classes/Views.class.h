@@ -21,9 +21,9 @@ class Views {
   Fl_Select_Browser* serialPortBrowser = new Fl_Select_Browser(10, 10, 140, 150);
   Fl_Button* serialPortChooseButton = new Fl_Button(20, 170, 120, 40, "Choose Port");
   Fl_Button* serialPortQuitButton = new Fl_Button(20, 220, 120, 40, "Quit");
-  Fl_Window* aboutWindow = new Fl_Window(300, 140, aboutTitleText.c_str());
+  Fl_Window* aboutWindow = new Fl_Window(300, 140);
   Fl_Box* aboutTitleBox = new Fl_Box(10, 10, 280, 40, PROGRAM_TITLE);
-  Fl_Box* aboutInfoBox = new Fl_Box(10, 50, 280, 80, aboutInfoBoxString.c_str());
+  Fl_Box* aboutInfoBox = new Fl_Box(10, 50, 280, 80);
   Fl_Window* mainWindow = new Fl_Window(680, 400);
   Fl_Box* mainTitleBox = new Fl_Box(40, 10, 600, 40, PROGRAM_TITLE);
   Fl_Box* mainDataBox = new Fl_Box(10, 60, 660, 320);

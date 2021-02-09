@@ -22,22 +22,12 @@ class CommLink {
   int deviceDescriptor;
 
   // internal methods
-  bool setBuffer(std::string data) {
-    if(data.length() == 0) {
-      return false;
-    }
-    else {
-      buffer.assign(data);
-    }
+  void setBuffer(std::string data) {
+    buffer.assign(data);
   }
 
-  bool setErrorMessage(std::string data) {
-    if(data.length() == 0) {
-      return false;
-    }
-    else {
-      errorMessage.assign(data);
-    }
+  void setErrorMessage(std::string data) {
+    errorMessage.assign(data);
   }
 
   int getDeviceDescriptor() {

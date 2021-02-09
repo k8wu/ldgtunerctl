@@ -19,8 +19,8 @@
 class CommLink {
   std::string buffer, errorMessage;
   int deviceDescriptor;
-  bool setBuffer(std::string data);
-  bool setErrorMessage(std::string data);
+  void setBuffer(std::string data);
+  void setErrorMessage(std::string data);
   int getDeviceDescriptor();
   void setDeviceDescriptor(int newDescriptor);
 

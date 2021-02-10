@@ -137,6 +137,9 @@ bool CommLink::setupDevice(std::string devicePath) {
 }
 
 bool CommLink::readFromDevice() {
+  // clear the class buffer
+  buffer.assign("");
+  
   // do a direct read to a temporary buffer
   char tempBuffer[256];
   memset(tempBuffer, 0x00, sizeof(tempBuffer));
@@ -157,6 +160,9 @@ bool CommLink::readFromDevice() {
 }
 
 bool CommLink::writeToDevice(std::string dataToWrite) {
+  // clear the class buffer
+  buffer.assign("");
+
   // can't do anything with an empty string
   if(dataToWrite.length() == 0) {
     errorMessage.assign("Empty write string given - not writing");

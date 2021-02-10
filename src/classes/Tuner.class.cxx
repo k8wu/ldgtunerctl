@@ -156,7 +156,8 @@ char Tuner::toggleAntenna() {
 
   // send the command once, since we could be waiting a bit for the result
   std::string receivedString;
-  masterCommLink->writeToDevice(commandChar);
+  // masterCommLink->writeToDevice(commandChar);
+  rawCommand(commandChar);
 
   // try a few times to read any response
   for(int attempt = 0; attempt < 10; attempt++) {
@@ -167,13 +168,13 @@ char Tuner::toggleAntenna() {
         return receivedByte;
       }
       else {
-        usleep(1000000);
+        usleep(500000);
       }
     }
 
     // sleep and try again if nothing is received
     else {
-      usleep(1000000);
+      usleep(500000);
     }
   }
 

@@ -121,8 +121,8 @@ bool CommLink::setupDevice(std::string devicePath) {
   tty.c_oflag &= ~OPOST;
   tty.c_oflag &= ~ONLCR;
 
-  // do not block on data reception
-  tty.c_cc[VTIME] = 3;
+  // do not block (for very long) on data reception
+  tty.c_cc[VTIME] = 10;
   tty.c_cc[VMIN] = 0;
 
   // see if the settings work, and bail if not

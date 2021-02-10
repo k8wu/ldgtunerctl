@@ -27,7 +27,7 @@ class Tuner {
       masterCommLink->writeToDevice(commandChar);
       if(!masterCommLink->readFromDevice()) {
         std::cout << "Error while reading from serial device" << std::endl;
-        return NULL;
+        return "";
       }
       receivedString.assign(masterCommLink->getBuffer());
       if(receivedString.length() > 0) {
@@ -36,7 +36,7 @@ class Tuner {
     }
 
     // no response
-    return NULL;
+    return "";
   }
 
 public:

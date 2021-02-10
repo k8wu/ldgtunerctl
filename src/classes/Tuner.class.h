@@ -13,12 +13,7 @@
 
 class Tuner {
   CommLink *masterCommLink = new CommLink();
-  int TUNER_CPU_STATE_BYPASS = 0;
-  int TUNER_CPU_STATE_AUTO = 1;
-  int TUNER_CPU_STATE_MANUAL = 2;
-  bool syncState;
-  int cpuState;
-  std::string rawCommand(const char *commandChar);
+  std::string rawCommand(const char *commandChar, const char *expectedRresponseString, bool isSync = false);
   bool getSyncState();
   void setSyncState(bool newSyncState);
   int getCpuState();

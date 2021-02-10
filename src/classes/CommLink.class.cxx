@@ -139,7 +139,7 @@ bool CommLink::setupDevice(std::string devicePath) {
 bool CommLink::readFromDevice() {
   // clear the class buffer
   buffer.assign("");
-  
+
   // do a direct read to a temporary buffer
   char tempBuffer[256];
   memset(tempBuffer, 0x00, sizeof(tempBuffer));
@@ -156,6 +156,9 @@ bool CommLink::readFromDevice() {
   }
   buffer.assign(tempBuffer);
   errorMessage.assign("");
+
+  // debug
+  std::cout << "buffer: '" << buffer << "'" << std::endl;
   return true;
 }
 

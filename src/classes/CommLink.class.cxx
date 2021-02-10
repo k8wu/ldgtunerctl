@@ -157,9 +157,6 @@ bool CommLink::readFromDevice() {
   buffer.assign(tempBuffer);
   errorMessage.assign("");
   usleep(50000);
-
-  // debug
-  std::cout << "buffer: '" << buffer << "'" << std::endl;
   return true;
 }
 

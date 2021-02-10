@@ -72,7 +72,6 @@ bool Tuner::commSync() {
     const char *cmdChar = "Z";
     std::string receivedSyncString = rawCommand(cmdChar, true);
     if(receivedSyncString.length() > 0 && receivedSyncString.compare("000000000000000AzAz") == 0) {
-      masterCommLink->readFromDevice();
       return true;
     }
   }

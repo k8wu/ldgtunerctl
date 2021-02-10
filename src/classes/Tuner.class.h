@@ -13,7 +13,7 @@
 
 class Tuner {
   CommLink *masterCommLink = new CommLink();
-  std::string rawCommand(const char *commandChar, const char *expectedRresponseString, bool isSync = false);
+  std::string rawCommand(const char *commandChar, bool isSync = false);
   bool getSyncState();
   void setSyncState(bool newSyncState);
   int getCpuState();

@@ -69,7 +69,7 @@ class Views {
   static void cbTune(Fl_Widget* widget, void* viewsObjRef) {
     // the calling button's label will determine the tuning operation
     bool fullTune = false;
-    if(strcmp(((Fl_Button*) widget)->label(),  "Full Tune")) {
+    if(strcmp(((Fl_Button*) widget)->label(),  "Full Tune") == 0) {
       fullTune = true;
     }
     std::string statusMessage = "Unknown (UNKN)";
@@ -97,7 +97,7 @@ class Views {
     }
 
     // finish the status message and send it to the status box
-    statusMessage.insert(statusMessage.length(), (fullTune) ? "(Full)" : "(Auto)");
+    statusMessage.insert(statusMessage.length(), (fullTune) ? "(Full)" : "(Memory)");
     ((Views*) viewsObjRef)->lastKnownTuneDataBox->copy_label(statusMessage.c_str());
   }
 

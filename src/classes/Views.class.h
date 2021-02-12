@@ -28,7 +28,7 @@ class Views {
   Fl_Box* mainTitleBox = new Fl_Box(40, 10, 600, 40, PROGRAM_TITLE);
   Fl_Box* mainDataBox = new Fl_Box(10, 60, 660, 320);
   Fl_Box* lastKnownTuneLabelBox = new Fl_Box(20, 70, 170, 40, "Last Known Tune:");
-  Fl_Box* lastKnownTuneDataBox = new Fl_Box(190, 70, 120, 40, "Not tuned yet");
+  Fl_Box* lastKnownTuneDataBox = new Fl_Box(190, 70, 140, 40, "Not tuned yet");
   Fl_Button* memoryTuneButton = new Fl_Button(20, 110, 140, 40, "Memory Tune");
   Fl_Button* fullTuneButton = new Fl_Button(170, 110, 100, 40, "Full Tune");
   Fl_Box* autoManualLabelBox = new Fl_Box(360, 70, 200, 40, "Auto/Manual Control");

@@ -32,7 +32,7 @@ If you have the Ports collection on your installation, you can compile FLTK from
 This program has not yet been shoehorned into `autoconf`, `cmake`, or any other such system yet. That day is coming, but for now, the following commands should get it built after either cloning or extracting the source:
 > cd ldgtunerctl  # if your source directory is called something different, replace "ldgtunerctl"
 >
-> g++ -Wall -o ldgtunerctl $(fltk-config --cxxflags) $(fltk-config --ldflags) src/classes/*.cxx src/main.cxx  # if you are on FreeBSD or macOS, replace "g++" with "c++" below (macOS users also add `--std=c++11` in the flags)
+> g++ -Wall -o ldgtunerctl $(fltk-config --cxxflags) $(fltk-config --ldflags) src/classes/*.cxx src/main.cxx  # if you are on FreeBSD or macOS, replace "g++" with "c++" (macOS users also add `--std=c++11` in the flags)
 >
 > sudo install -m 755 ldgtunerctl /usr/local/bin/ldgtunerctl  # change the path if you don't want to use /usr/local/bin
 

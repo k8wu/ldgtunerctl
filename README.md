@@ -8,7 +8,7 @@ The reason for this program's existence is that LDG offers a Windows executable 
 
 This program is built on C++ using FLTK. It should build using **gcc** (`g++`), **clang** (`clang++`), or any other C++11 compliant compiler on Linux. It is known to work on at least a Raspberry Pi 4 (which was the main development system), and should work on the Pi 2 and Pi 3 as well. Raspbian was tested, but it should work on any reasonably modern Linux system.
 
-As for other operating systems: The program compiles on macOS if the `--std=c++11` flag is passed to `clang++`, but serial port selection does not function well on that platform, and it has not been tested beyond that. There has been no testing at all yet on FreeBSD, OpenBSD, or any other OS.
+As for other operating systems: The program compiles on macOS if the `--std=c++11` flag is passed to `clang++`, but serial port selection does not function well on that platform, and it has not been tested beyond that. There has been minimal testing on FreeBSD indicating that `clang++` will compile the program with the default command switches given below. There has been no testing at all yet on other operating systems.
 
 ## Hardware
 
@@ -20,12 +20,24 @@ Aside from the tuner itself, an FTDI interface cable is required. Details can be
 **LDG Tuner Control** requires both the libraries/binaries and development headers for FLTK. On Debian, Raspbian, Ubuntu, or any other Debian-style system, these can be installed by executing the following command after enabling the proper **deb-src** line(s) in **/etc/apt/sources.list**:
 > sudo apt install libfltk1.3 libfltk1.3-dev
 
+On FreeBSD, you may install the precompiled FLTK package and its dependencies using these commands:
+> su
+> pkg install fltk
+
+If you have the Ports collection on your installation, you can compile FLTK from source, though it does have several dependencies that you may not have on your system yet, so compilation will take some time:
+> su
+> cd /usr/ports/x11-toolkits/fltk
+> make && make install
+
 This program has not yet been shoehorned into `autoconf`, `cmake`, or any other such system yet. That day is coming, but for now, the following commands should get it built after either cloning or extracting the source:
-> cd ldgtunerctl # or whatever your source directory is named
+> # if your source directory is called something different, replace "ldgtunerctl" below
+> cd ldgtunerctl
 >
+> # if you are on FreeBSD or macOS, replace "g++" with "c++" below (macOS users also add `--std=c++11` in the flags)
 > g++ -Wall -o ldgtunerctl $(fltk-config --cxxflags) $(fltk-config --ldflags) src/classes/*.cxx src/main.cxx
 >
-> sudo install -m 755 ldgtunerctl /usr/local/bin/ldgtunerctl # change path if you don't want to use /usr/local/bin
+> # change the path if you don't want to use /usr/local/bin
+> sudo install -m 755 ldgtunerctl /usr/local/bin/ldgtunerctl
 
 ## Running the program
 

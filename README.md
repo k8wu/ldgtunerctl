@@ -44,10 +44,13 @@ When you run the program, it will present a window with a list of serial ports, 
 
 ![Serial port selection window](https://k8wu.me/images/ldgtunerctl-serial_port_selection_window.png)
 
-You can choose the port where your tuner lives. If you do not know which one it is (or if `udev` is playing tricks on you upon each reboot), you can try each one on the list until you find one that works. If the program exits with an error sent to standard output about not being able to detect any devices, please ensure that your user is in the `dialout` group (for Debian-style systems):
+You can choose the port where your tuner lives. If you do not know which one it is (or if `udev` is playing tricks on you upon each reboot), you can try each one on the list until you find one that works. If the program exits with an error sent to standard output about not being able to detect any devices, or if you do not see your serial device listed, please ensure that you have the proper user permissions. On Debian-style systems, your user must be in the `dialout` group; if it is not, you can add it with this command:
 > sudo adduser $(id -un) dialout
 
-Then log out and back in for the change to take effect.
+On FreeBSD systems, being in the `dialer` group achieves the same effect, and adding yourself to that group can be done using this command:
+> sudo pw groupmod dialer -m $(id -un)
+
+In any case, if you add your user to a new group, you must log out and back in for the change to take effect.
 
 If everything works and your tuner is detected (i.e. it doesn't complain about not being able to sync or something), you will be presented with a screen that looks something like this:
 

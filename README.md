@@ -1,3 +1,4 @@
+
 # LDG Tuner Control
 
 ## Description
@@ -17,24 +18,29 @@ Aside from the tuner itself, an FTDI interface cable is required. Details can be
 
 ## Compilation
 
-**LDG Tuner Control** requires both the libraries/binaries and development headers for FLTK. On Debian, Raspbian, Ubuntu, or any other Debian-style system, these can be installed by executing the following command after enabling the proper **deb-src** line(s) in **/etc/apt/sources.list**:
-> sudo apt install libfltk1.3 libfltk1.3-dev
+**LDG Tuner Control** requires both the libraries/binaries and development headers for FLTK. On Debian, Raspbian, Ubuntu, or any other Debian-style system, these can be installed by executing the following command as root (via `sudo` or `su`) after enabling the proper **deb-src** line(s) in **/etc/apt/sources.list**:
 
-On FreeBSD, you may install the precompiled FLTK package and its dependencies using these commands:
-> su
-> pkg install fltk
+    apt install libfltk1.3 libfltk1.3-dev
+
+On FreeBSD, you may install the precompiled FLTK package and its dependencies using this command as root:
+
+    pkg install fltk
 
 If you have the Ports collection on your installation, you can compile FLTK from source, though it does have several dependencies that you may not have on your system yet, so compilation will take some time:
-> su
-> cd /usr/ports/x11-toolkits/fltk
-> make && make install
 
-This program has not yet been shoehorned into `autoconf`, `cmake`, or any other such system yet. That day is coming, but for now, the following commands should get it built after either cloning or extracting the source:
-> cd ldgtunerctl  # if your source directory is called something different, replace "ldgtunerctl"
->
-> g++ -Wall -o ldgtunerctl $(fltk-config --cxxflags) $(fltk-config --ldflags) src/classes/*.cxx src/main.cxx  # if you are on FreeBSD or macOS, replace "g++" with "c++" (macOS users also add `--std=c++11` in the flags)
->
-> sudo install -m 755 ldgtunerctl /usr/local/bin/ldgtunerctl  # change the path if you don't want to use /usr/local/bin
+    cd /usr/ports/x11-toolkits/fltk
+    make && make install
+
+This program has not yet been shoehorned into `autoconf`, `cmake`, or any other such system. That day is coming, but for now, the following commands should get it built after either cloning or extracting the source:
+
+    # if your source directory is called something different, replace "ldgtunerctl"
+    cd ldgtunerctl
+
+    # if you are on FreeBSD or macOS, replace "g++" with "c++" (macOS users also add `--std=c++11` in the flags)
+    g++ -Wall -o ldgtunerctl $(fltk-config --cxxflags) $(fltk-config --ldflags) src/classes/*.cxx src/main.cxx
+
+    # change the path if you don't want to use /usr/local/bin
+    sudo install -m 755 ldgtunerctl /usr/local/bin/ldgtunerctl
 
 ## Running the program
 
@@ -44,11 +50,13 @@ When you run the program, it will present a window with a list of serial ports, 
 
 ![Serial port selection window](https://k8wu.me/images/ldgtunerctl-serial_port_selection_window.png)
 
-You can choose the port where your tuner lives. If you do not know which one it is (or if `udev` is playing tricks on you upon each reboot), you can try each one on the list until you find one that works. If the program exits with an error sent to standard output about not being able to detect any devices, or if you do not see your serial device listed, please ensure that you have the proper user permissions. On Debian-style systems, your user must be in the `dialout` group; if it is not, you can add it with this command:
-> sudo adduser $(id -un) dialout
+You can choose the port where your tuner lives. If you do not know which one it is (or if `udev` is playing tricks on you upon each reboot), you can try each one on the list until you find one that works. If the program exits with an error sent to standard output about not being able to detect any devices, or if you do not see your serial device listed, please ensure that you have the proper user permissions. On Debian-style systems, your user must be in the `dialout` group; if it is not, you can add it with this command, run as root:
 
-On FreeBSD systems, being in the `dialer` group achieves the same effect, and adding yourself to that group can be done using this command:
-> sudo pw groupmod dialer -m $(id -un)
+    adduser $(id -un) dialout
+
+On FreeBSD systems, being in the `dialer` group achieves the same effect, and adding yourself to that group can be done using this command as root:
+
+    pw groupmod dialer -m $(id -un)
 
 In any case, if you add your user to a new group, you must log out and back in for the change to take effect.
 

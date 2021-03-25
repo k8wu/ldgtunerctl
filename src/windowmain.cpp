@@ -10,11 +10,11 @@ WindowMain::WindowMain(QWidget* parent) : QWidget(parent)
     setWindowTitle(PROGRAM_TITLE " " PROGRAM_VERSION);
 
     // set up widgets
-    QFont normalFont(NULL, 18, QFont::Normal);
-    QFont headingFont(NULL, 18, QFont::Bold);
-    QFont titleLabelFont(NULL, 24, QFont::Bold);
+    QFont normalFont("Helvetica", 12, QFont::Normal);
+    QFont headingFont("Helvetica", 12, QFont::Bold);
+    QFont titleLabelFont("Helvetica", 20, QFont::Bold);
     titleLabel = new QLabel(PROGRAM_TITLE, this);
-    titleLabel->setGeometry(230, 10, 220, 40);
+    titleLabel->setGeometry(200, 10, 280, 40);
     titleLabel->setAlignment(Qt::AlignCenter);
     titleLabel->setFont(titleLabelFont);
 

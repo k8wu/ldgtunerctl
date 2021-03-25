@@ -2,6 +2,7 @@
 
 CommLink::CommLink(QString serialDevice)
 {
+    DEBUG && std::cout << "CommLink::CommLink(): Initializing object instance" << std::endl;
     this->serialDevice = serialDevice;
 }
 

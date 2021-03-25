@@ -8,6 +8,9 @@
 #include <fcntl.h>
 #include <termios.h>
 #include <unistd.h>
+#include <iostream>
+
+#include "appconfig.h"
 
 class CommLink
 {

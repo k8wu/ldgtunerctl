@@ -16,9 +16,9 @@ HEADERS += \
     src/windowmain.h \
     src/windowselectdevice.h
 
-Debug:DEFINES += DEBUG=1
+DEFINES += DEBUG=0
 
-Release:DEFINES += DEBUG=0
+Debug:DEFINES += DEBUG=1
 
 linux {
     DEFINES += LINUX=1

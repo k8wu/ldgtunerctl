@@ -16,5 +16,17 @@ HEADERS += \
     src/windowmain.h \
     src/windowselectdevice.h
 
-DEFINES += \
-    MACOS=1
+Debug:DEFINES += \
+    DEBUG=1
+
+linux {
+    DEFINES += LINUX=1
+}
+
+mac {
+    DEFINES += MACOS=1
+}
+
+freebsd {
+    DEFINES += FREEBSD=1
+}

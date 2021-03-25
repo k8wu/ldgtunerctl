@@ -5,8 +5,6 @@
 #ifndef APPCONFIG_H
 #define APPCONFIG_H
 
-#define DEBUG true
-
 #define PROGRAM_TITLE "LDG Tuner Control"
 #define PROGRAM_VERSION "0.0.2-dev"
 #define PROGRAM_AUTHOR "Mike Phipps"

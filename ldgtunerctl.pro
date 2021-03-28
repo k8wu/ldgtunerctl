@@ -22,18 +22,11 @@ INCLUDEPATH += \
     /usr/include \
     /usr/local/include
 
+QMAKE_LIBDIR += \
+    /usr/lib \
+    /usr/local/lib
+
 QMAKE_LIBDIR_FLAGS += \
     -lserialport \
     -lusb
-
-linux {
-    DEFINES += LINUX=1
-}
-
-mac {
-    DEFINES += MACOS=1
-}
-
-freebsd {
-    DEFINES += FREEBSD=1
-}
+s

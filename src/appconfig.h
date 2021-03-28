@@ -10,5 +10,6 @@
 #define PROGRAM_AUTHOR "Mike Phipps"
 #define PROGRAM_AUTHOR_CALLSIGN "K8WU"
 #define PROGRAM_AUTHOR_EMAIL "qrz(at)k8wu.me"
+#define PROGRAM_AUTHOR_WEBSITE "https://github.com/k8wu"
 
 #endif // APPCONFIG_H

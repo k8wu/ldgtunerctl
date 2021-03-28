@@ -11,6 +11,7 @@
 
 #include "appconfig.h"
 #include "commlink.h"
+#include "windowabout.h"
 
 class WindowMain : public QWidget
 {
@@ -42,7 +43,8 @@ class WindowMain : public QWidget
     QString serialDevice;
     CommLink* commLink;
     QColor defaultButtonBackground;
-
+signals:
+    void sigShowWindowAbout();
 public:
     explicit WindowMain(QWidget* parent = nullptr);
 public slots:
@@ -54,6 +56,7 @@ public slots:
     void slotSetManual();
     void slotToggleBypass();
     void slotToggleAntenna();
+    void slotShowWindowAbout();
     void slotShutdown();
 };
 

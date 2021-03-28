@@ -5,11 +5,12 @@ WindowMain::WindowMain(QWidget* parent) : QWidget(parent)
     qDebug() << "WindowMain::WindowMain(): Initializing object instance";
 
     // containing window properties
-    qDebug() << "WindowMain::WindowMain(): Setting up window and widgets";
+    qDebug() << "WindowMain::WindowMain(): Setting up main window";
     setFixedSize(680, 440);
     setWindowTitle(PROGRAM_TITLE " " PROGRAM_VERSION);
 
     // set up widgets
+    qDebug() << "WindowMain::WindowMain(): Setting up main window widgets";
     QFont normalFont("Helvetica", 12, QFont::Normal);
     QFont headingFont("Helvetica", 12, QFont::Bold);
     QFont titleLabelFont("Helvetica", 20, QFont::Bold);
@@ -97,9 +98,12 @@ WindowMain::WindowMain(QWidget* parent) : QWidget(parent)
     statusLabel->setFont(normalFont);
 
     // the default button color isn't available otherwise
+    qDebug() << "WindowMain::WindowMain(): Getting default button color";
     defaultButtonBackground = aboutButton->palette().color(QPalette::Button);
 
     // button actions
+    qDebug() << "WindowMain::WindowMain(): Defining button actions";
+    connect(aboutButton, SIGNAL(clicked()), this, SLOT(slotShowWindowAbout()));
     connect(exitButton, SIGNAL(clicked()), this, SLOT(slotShutdown()));
     connect(memoryTuneButton, SIGNAL(clicked()), this, SLOT(slotDoMemoryTune()));
     connect(fullTuneButton, SIGNAL(clicked()), this, SLOT(slotDoFullTune()));
@@ -243,6 +247,11 @@ void WindowMain::slotToggleAntenna() {
     QString res = commLink->toggleAntenna();
     antennaSelectionDataLabel->setText(res);
     qDebug() << "WindowMain::slotToggleAntenna(): Result:" << res;
+}
+
+void WindowMain::slotShowWindowAbout() {
+    qDebug() << "WindowMain::slotShowWindowAbout(): Function called, sending to main";
+    emit(sigShowWindowAbout());
 }
 
 void WindowMain::slotShutdown() {

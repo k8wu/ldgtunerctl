@@ -2,10 +2,10 @@
 
 WindowSelectDevice::WindowSelectDevice(QWidget *parent) : QWidget(parent)
 {
-    DEBUG && std::cout << "WindowSelectDevice::WindowSelectDevice(): Initializing object instance" << std::endl;
+    qDebug() << "WindowSelectDevice::WindowSelectDevice(): Initializing object instance";
 
     // containing window properties
-    DEBUG && std::cout << "WindowSelectDevice::WindowSelectDevice(): Setting up window and widgets" << std::endl;
+    qDebug() << "WindowSelectDevice::WindowSelectDevice(): Setting up window and widgets";
     setFixedSize(240, 320);
     setWindowTitle("Select Serial Port");
 
@@ -38,14 +38,14 @@ QString WindowSelectDevice::getSerialDevice() {
 }
 
 void WindowSelectDevice::handleSelectedDevice() {
-    DEBUG && std::cout << "WindowSelectDevice::handleSelectedDevice(): Querying QListView for selection" << std::endl;
+    qDebug() << "WindowSelectDevice::handleSelectedDevice(): Querying QListView for selection";
     QModelIndex index = browser->currentIndex();
     this->setSerialDevice(index.data(Qt::DisplayRole).toString());
-    DEBUG && std::cout << "WindowSelectDevice::handleSelectedDevice(): Selected device = " << this->getSerialDevice().toStdString() << std::endl;
-    DEBUG && std::cout << "WindowSelectDevice::handleSelectedDevice(): Hiding this window" << std::endl;
+    qDebug() << "WindowSelectDevice::handleSelectedDevice(): Selected device = " << this->getSerialDevice();
+    qDebug() << "WindowSelectDevice::handleSelectedDevice(): Hiding this window";
     this->hide();
-    DEBUG && std::cout << "WindowSelectDevice::handleSelectedDevice(): Sending serial device selection" << std::endl;
+    qDebug() << "WindowSelectDevice::handleSelectedDevice(): Sending serial device selection";
     emit sigSerialDeviceChosen(this->getSerialDevice());
-    DEBUG && std::cout << "WindowSelectDevice::handleSelectedDevice(): Sending request to show main window" << std::endl;
+    qDebug() << "WindowSelectDevice::handleSelectedDevice(): Sending request to show main window";
     emit sigShowWindowMain();
 }

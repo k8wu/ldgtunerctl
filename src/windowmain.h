@@ -2,6 +2,7 @@
 #define WINDOWMAIN_H
 
 #include <QApplication>
+#include <QDebug>
 #include <QWidget>
 #include <QLabel>
 #include <QPushButton>
@@ -9,6 +10,7 @@
 #include <iostream>
 
 #include "appconfig.h"
+#include "commlink.h"
 
 class WindowMain : public QWidget
 {
@@ -38,11 +40,15 @@ class WindowMain : public QWidget
 
     // variables
     QString serialDevice;
+    CommLink* commLink;
+
 public:
     explicit WindowMain(QWidget* parent = nullptr);
 public slots:
     void slotGetSerialDevice(QString chosenSerialDevice);
     void slotShowWindowMain();
+    void slotToggleAntenna();
+    void slotShutdown();
 };
 
 #endif // WINDOWMAIN_H

@@ -16,9 +16,13 @@ HEADERS += \
     src/windowmain.h \
     src/windowselectdevice.h
 
-DEFINES += DEBUG=0
+INCLUDEPATH += \
+    /usr/include \
+    /usr/local/include
 
-Debug:DEFINES += DEBUG=1
+QMAKE_LIBDIR_FLAGS += \
+    -lserialport \
+    -lusb
 
 linux {
     DEFINES += LINUX=1

@@ -2,10 +2,10 @@
 
 WindowMain::WindowMain(QWidget* parent) : QWidget(parent)
 {
-    DEBUG && std::cout << "WindowMain::WindowMain(): Initializing object instance" << std::endl;
+    qDebug() << "WindowMain::WindowMain(): Initializing object instance";
 
     // containing window properties
-    DEBUG && std::cout << "WindowMain::WindowMain(): Setting up window and widgets" << std::endl;
+    qDebug() << "WindowMain::WindowMain(): Setting up window and widgets";
     setFixedSize(680, 440);
     setWindowTitle(PROGRAM_TITLE " " PROGRAM_VERSION);
 
@@ -97,15 +97,40 @@ WindowMain::WindowMain(QWidget* parent) : QWidget(parent)
     statusLabel->setFont(normalFont);
 
     // button actions
-    connect(exitButton, SIGNAL(clicked()), QApplication::instance(), SLOT(quit()));
+    connect(exitButton, SIGNAL(clicked()), this, SLOT(slotShutdown()));
+    connect(antennaToggleButton, SIGNAL(clicked()), this, SLOT(slotToggleAntenna()));
 }
 
 void WindowMain::slotGetSerialDevice(QString chosenSerialDevice) {
-    DEBUG && std::cout << "WindowMain::slotGetSerialDevice(): Receiving serial device selection" << std::endl;
+    qDebug() << "WindowMain::slotGetSerialDevice(): Receiving serial device selection";
     this->serialDevice = chosenSerialDevice;
 }
 
 void WindowMain::slotShowWindowMain() {
-    DEBUG && std::cout << "WindowMain::slotShowWindowMain(): Receiving request to show this window" << std::endl;
+    qDebug() << "WindowMain::slotShowWindowMain(): Receiving request to show this window";
     this->show();
+
+    // initial tuner sync
+    commLink = new CommLink(this->serialDevice);
+    if(commLink->tunerSync()) {
+        qDebug() << "WindowMain::slotShowWindowMain(): Tuner synced, updating status";
+        statusLabel->setText("Tuner synced");
+    }
+    else {
+        qDebug() << "WindowMain::slotShowWindowMain(): Tuner not synced, updating status";
+        statusLabel->setText("Tuner not synced");
+    }
+}
+
+void WindowMain::slotToggleAntenna() {
+    qDebug() << "WindowMain::slotToggleAntenna(): Function called, toggling antenna";
+    QString res = commLink->toggleAntenna();
+    antennaSelectionDataLabel->setText(res);
+    qDebug() << "WindowMain::slotToggleAntenna(): Result: '" << res << "'";
+}
+
+void WindowMain::slotShutdown() {
+    qDebug() << "WindowMain::slotShutdown(): Function called, shutting down";
+    commLink->close();
+    QApplication::instance()->quit();
 }

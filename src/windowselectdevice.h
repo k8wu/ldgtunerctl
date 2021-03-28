@@ -2,6 +2,7 @@
 #define WINDOWSELECTDEVICE_H
 
 #include <QApplication>
+#include <QDebug>
 #include <QWidget>
 #include <QListView>
 #include <QPushButton>

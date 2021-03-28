@@ -41,12 +41,16 @@ class WindowMain : public QWidget
     // variables
     QString serialDevice;
     CommLink* commLink;
+    QColor defaultButtonBackground;
 
 public:
     explicit WindowMain(QWidget* parent = nullptr);
 public slots:
     void slotGetSerialDevice(QString chosenSerialDevice);
     void slotShowWindowMain();
+    void slotSetAuto();
+    void slotSetManual();
+    void slotToggleBypass();
     void slotToggleAntenna();
     void slotShutdown();
 };

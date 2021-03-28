@@ -96,8 +96,14 @@ WindowMain::WindowMain(QWidget* parent) : QWidget(parent)
     statusLabel->setGeometry(10, 20, 620, 50);
     statusLabel->setFont(normalFont);
 
+    // the default button color isn't available otherwise
+    defaultButtonBackground = aboutButton->palette().color(QPalette::Button);
+
     // button actions
     connect(exitButton, SIGNAL(clicked()), this, SLOT(slotShutdown()));
+    connect(autoTunerModeButton, SIGNAL(clicked()), this, SLOT(slotSetAuto()));
+    connect(manualTunerModeButton, SIGNAL(clicked()), this, SLOT(slotSetManual()));
+    connect(bypassTunerButton, SIGNAL(clicked()), this, SLOT(slotToggleBypass()));
     connect(antennaToggleButton, SIGNAL(clicked()), this, SLOT(slotToggleAntenna()));
 }
 
@@ -122,11 +128,67 @@ void WindowMain::slotShowWindowMain() {
     }
 }
 
+void WindowMain::slotSetAuto() {
+    qDebug() << "WindowMain::slotSetAuto(): Function called, setting auto mode";
+    QString res = commLink->setAuto();
+    qDebug() << "WindowMain::slotSetAuto(): Result:" << res;
+    if(res == "A") {
+        // turn the Auto button background green
+        QPalette pal = autoTunerModeButton->palette();
+        pal.setColor(QPalette::Button, QColor(Qt::green));
+        autoTunerModeButton->setAutoFillBackground(true);
+        autoTunerModeButton->setPalette(pal);
+
+        // this usually means that the other two in this group go back to default
+        for(QPushButton* thisButton : { manualTunerModeButton, bypassTunerButton}) {
+            pal = thisButton->palette();
+            pal.setColor(QPalette::Button, defaultButtonBackground);
+            thisButton->setAutoFillBackground(true);
+            thisButton->setPalette(pal);
+        }
+    }
+}
+
+void WindowMain::slotSetManual() {
+    qDebug() << "WindowMain::slotSetManual(): Function called, setting auto mode";
+    QString res = commLink->setManual();
+    qDebug() << "WindowMain::slotSetManual(): Result:" << res;
+    if(res == "M") {
+        // turn the Manual button background green
+        QPalette pal = manualTunerModeButton->palette();
+        pal.setColor(QPalette::Button, QColor(Qt::green));
+        manualTunerModeButton->setAutoFillBackground(true);
+        manualTunerModeButton->setPalette(pal);
+
+        // this usually means that the other two in this group go back to default
+        for(QPushButton* thisButton : { autoTunerModeButton, bypassTunerButton}) {
+            pal = thisButton->palette();
+            pal.setColor(QPalette::Button, defaultButtonBackground);
+            thisButton->setAutoFillBackground(true);
+            thisButton->setPalette(pal);
+        }
+    }
+}
+
+void WindowMain::slotToggleBypass() {
+    qDebug() << "WindowMain::slotToggleBypass(): Function called, setting bypass mode";
+    QString res = commLink->toggleBypass();
+    qDebug() << "WindowMain::slotToggleBypass(): Result:" << res;
+    if(res == "P") {
+        // turn the Bypass button green
+        QPalette pal = bypassTunerButton->palette();
+        pal.setColor(QPalette::Button, QColor(Qt::green));
+        bypassTunerButton->setAutoFillBackground(true);
+        bypassTunerButton->setPalette(pal);
+        bypassTunerButton->update();
+    }
+}
+
 void WindowMain::slotToggleAntenna() {
     qDebug() << "WindowMain::slotToggleAntenna(): Function called, toggling antenna";
     QString res = commLink->toggleAntenna();
     antennaSelectionDataLabel->setText(res);
-    qDebug() << "WindowMain::slotToggleAntenna(): Result: '" << res << "'";
+    qDebug() << "WindowMain::slotToggleAntenna(): Result:" << res;
 }
 
 void WindowMain::slotShutdown() {

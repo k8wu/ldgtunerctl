@@ -20,14 +20,14 @@ bool CommLink::setup() {
     // define the port object
     res = sp_get_port_by_name(serialDevice.toStdString().c_str(), &serialPort);
     if(res < 0) {
-        qDebug() << "CommLink::setup(): Failed to get " << this->serialDevice << " referenced by name";
+        qDebug() << "CommLink::setup(): Failed to get" << this->serialDevice << "referenced by name";
         return false;
     }
 
     // open the port
     res = sp_open(serialPort, SP_MODE_READ_WRITE);
     if(res < 0) {
-        qDebug() << "CommLink::setup(): Failed to open: " << sp_last_error_message() << " (" << res << ")";
+        qDebug() << "CommLink::setup(): Failed to open:" << sp_last_error_message() << "(" << res << ")";
         sp_free_port(serialPort);
         return false;
     }
@@ -42,7 +42,7 @@ bool CommLink::setup() {
     }
     sp_nonblocking_read(serialPort, readBuffer, sizeof(readBuffer));
     memset(readBuffer, 0, sizeof(readBuffer));
-    qDebug() << "CommLink::setup(): Flushed buffers, " << sp_input_waiting(serialPort) << " input bytes, " << sp_output_waiting(serialPort) << " output bytes remaining";
+    qDebug() << "CommLink::setup(): Flushed buffers," << sp_input_waiting(serialPort) << "input bytes," << sp_output_waiting(serialPort) << "output bytes remaining";
 
     // set up the port
     res = sp_set_baudrate(serialPort, 38400);
@@ -86,30 +86,40 @@ bool CommLink::setup() {
     return true;
 }
 
-QString CommLink::trx(QString command) {
+// rxTimeout is in ms
+QString CommLink::trx(QString command, unsigned int rxTimeout) {
     char readBuffer[40];
     int res;
+    int rxBytesWaiting;
 
     // do a dummy read, then clear buffers
     sp_nonblocking_read(serialPort, readBuffer, sizeof(readBuffer));
     memset(readBuffer, 0, sizeof(readBuffer));
     buffer.clear();
+    qDebug() << "CommLink::trx(): Cleared buffers," << sp_output_waiting(serialPort) << "output," << sp_input_waiting(serialPort) << "input remaining";
 
-    qDebug() << "CommLink::trx(): Writing command '" << command << "'";
-    sp_wait(txEventSet, 2000);
-    res = sp_nonblocking_write(serialPort, command.toStdString().c_str(), command.length());
-    if(res < 0) {
-        qDebug() << "CommLink::trx(): Failed to write command";
-        return "";
+    qDebug() << "CommLink::trx(): Writing command" << command;
+    for(QChar c : command) {
+        qDebug() << "CommLink::trx(): Waiting 100 ms to write next byte";
+        usleep(100000);
+        qDebug() << "CommLink::trx(): Writing character with a wait up to 100 ms";
+        res = sp_blocking_write(serialPort, &c, 1, 100);
+        if(res < 0) {
+            qDebug() << "CommLink::trx(): Failed to write character";
+            return "";
+        }
+        sp_drain(serialPort);
+        qDebug() << "CommLink::trx(): Wrote character:" << c;
     }
-    sp_drain(serialPort);
-    qDebug() << "CommLink::trx(): Wrote " << res << " byte(s)";
+    qDebug() << "CommLink::trx(): Wrote command - now waiting up to" << rxTimeout << "ms for receive data";
 
-    sp_wait(rxEventSet, 2000);
-    if(sp_input_waiting(serialPort) == 0) {
+    sp_wait(rxEventSet, rxTimeout);
+    rxBytesWaiting = sp_input_waiting(serialPort);
+    if(rxBytesWaiting == 0) {
         qDebug() << "CommLink::trx(): No RX bytes waiting";
     }
     else {
+        qDebug() << "CommLink::trx():" << rxBytesWaiting << "receive bytes waiting";
         do {
             res = sp_nonblocking_read(serialPort, readBuffer, sizeof(readBuffer));
             if(res < 0) {
@@ -119,12 +129,12 @@ QString CommLink::trx(QString command) {
             else if(res == 0) {
                 qDebug() << "CommLink::trx(): No more bytes to read";
             }
-            qDebug() << "CommLink::trx(): Read " << res << " byte(s): '" << readBuffer << "'";
+            qDebug() << "CommLink::trx(): Read" << res << "byte(s):" << readBuffer;
             buffer.append(readBuffer);
             memset(readBuffer, 0, sizeof(readBuffer));
         } while(sp_input_waiting(serialPort) > 0);
     }
-    qDebug() << "CommLink::trx(): Total read buffer: '" << buffer << "'";
+    qDebug() << "CommLink::trx(): Total read buffer:" << buffer;
     return buffer;
 }
 
@@ -138,8 +148,8 @@ bool CommLink::tunerSync() {
 
     // loop a few times until we get synced, or we run out of attempts
     for(int syncAttempt = 1; syncAttempt <= 5; syncAttempt++) {
-        buffer = trx(" Z Z");
-        qDebug() << "CommLink::tunerSync(): Total read buffer: '" << buffer << "'";
+        buffer = trx(" Z");
+        qDebug() << "CommLink::tunerSync(): Total read buffer:" << buffer;
         if(buffer == syncResponseString) {
             qDebug() << "CommLink::tunerSync(): Tuner is synced";
             return true;
@@ -154,6 +164,27 @@ bool CommLink::tunerSync() {
     return false;
 }
 
+QString CommLink::setAuto() {
+    qDebug() << "CommLink::setAuto(): Setting automatic tuning mode";
+    buffer = trx(" C");
+    qDebug() << "CommLink::setAuto(): Response:" << buffer;
+    return buffer;
+}
+
+QString CommLink::setManual() {
+    qDebug() << "CommLink::setManual(): Setting manual tuning mode";
+    buffer = trx(" M");
+    qDebug() << "CommLink::setManual(): Response:" << buffer;
+    return buffer;
+}
+
+QString CommLink::toggleBypass() {
+    qDebug() << "CommLink::toggleBypass(): Toggling bypass mode";
+    buffer = trx(" P");
+    qDebug() << "CommLink::toggleBypass(): Response:" << buffer;
+    return buffer;
+}
+
 QString CommLink::toggleAntenna() {
 //    qDebug() << "CommLink::toggleAntenna(): Function called, syncing tuner";
 //    if(!tunerSync()) {
@@ -162,8 +193,8 @@ QString CommLink::toggleAntenna() {
 //    }
 
     qDebug() << "CommLink::toggleAntenna(): Toggling antenna";
-    buffer = trx(" Z A");
-    qDebug() << "CommLink::toggleAntenna(): Response: '" << buffer << "'";
+    buffer = trx(" A");
+    qDebug() << "CommLink::toggleAntenna(): Response:" << buffer;
     return buffer;
 }
 

@@ -10,6 +10,7 @@ extern "C" {
 #include <QStringList>
 #include <string>
 #include <iostream>
+#include <unistd.h>
 
 #include "appconfig.h"
 
@@ -25,10 +26,13 @@ class CommLink
 
     // private methods
     bool setup();
-    QString trx(QString command);
+    QString trx(QString command, unsigned int rxTimeout = 2000);
 public:
     CommLink(QString serialDevice);
     bool tunerSync();
+    QString setAuto();
+    QString setManual();
+    QString toggleBypass();
     QString toggleAntenna();
     void close();
     static QStringList enumerateDevices();

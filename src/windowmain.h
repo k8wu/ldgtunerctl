@@ -48,6 +48,8 @@ public:
 public slots:
     void slotGetSerialDevice(QString chosenSerialDevice);
     void slotShowWindowMain();
+    void slotDoMemoryTune();
+    void slotDoFullTune();
     void slotSetAuto();
     void slotSetManual();
     void slotToggleBypass();

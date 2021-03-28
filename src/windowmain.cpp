@@ -101,6 +101,8 @@ WindowMain::WindowMain(QWidget* parent) : QWidget(parent)
 
     // button actions
     connect(exitButton, SIGNAL(clicked()), this, SLOT(slotShutdown()));
+    connect(memoryTuneButton, SIGNAL(clicked()), this, SLOT(slotDoMemoryTune()));
+    connect(fullTuneButton, SIGNAL(clicked()), this, SLOT(slotDoFullTune()));
     connect(autoTunerModeButton, SIGNAL(clicked()), this, SLOT(slotSetAuto()));
     connect(manualTunerModeButton, SIGNAL(clicked()), this, SLOT(slotSetManual()));
     connect(bypassTunerButton, SIGNAL(clicked()), this, SLOT(slotToggleBypass()));
@@ -128,6 +130,58 @@ void WindowMain::slotShowWindowMain() {
     }
 }
 
+void WindowMain::slotDoMemoryTune() {
+    qDebug() << "WindowMain::slotDoMemoryTune(): Function called, executing memory tune";
+    QString res = commLink->doMemoryTune();
+    qDebug() << "WindowMain::slotDoMemoryTune(): Result:" << res;
+    if(res == "T") {
+        lastKnownTuneDataLabel->setText("Good (Memory)");
+    }
+    else if(res == "M") {
+        lastKnownTuneDataLabel->setText("OK (Memory)");
+    }
+    else if(res == "F") {
+        lastKnownTuneDataLabel->setText("Fail (Memory)");
+    }
+    else {
+        lastKnownTuneDataLabel->setText("Unknown (Memory)");
+    }
+
+    // bypass mode is turned off after tuning
+    for(QPushButton* thisButton : { bypassTunerButton }) {
+        QPalette pal = thisButton->palette();
+        pal.setColor(QPalette::Button, defaultButtonBackground);
+        thisButton->setAutoFillBackground(true);
+        thisButton->setPalette(pal);
+    }
+}
+
+void WindowMain::slotDoFullTune() {
+    qDebug() << "WindowMain::slotDoFullTune(): Function called, executing full tune";
+    QString res = commLink->doMemoryTune();
+    qDebug() << "WindowMain::slotDoFullTune(): Result:" << res;
+    if(res == "T") {
+        lastKnownTuneDataLabel->setText("Good (Full)");
+    }
+    else if(res == "M") {
+        lastKnownTuneDataLabel->setText("OK (Full)");
+    }
+    else if(res == "F") {
+        lastKnownTuneDataLabel->setText("Fail (Full)");
+    }
+    else {
+        lastKnownTuneDataLabel->setText("Unknown (Full)");
+    }
+
+    // bypass mode is turned off after tuning
+    for(QPushButton* thisButton : { bypassTunerButton }) {
+        QPalette pal = thisButton->palette();
+        pal.setColor(QPalette::Button, defaultButtonBackground);
+        thisButton->setAutoFillBackground(true);
+        thisButton->setPalette(pal);
+    }
+}
+
 void WindowMain::slotSetAuto() {
     qDebug() << "WindowMain::slotSetAuto(): Function called, setting auto mode";
     QString res = commLink->setAuto();
@@ -140,7 +194,7 @@ void WindowMain::slotSetAuto() {
         autoTunerModeButton->setPalette(pal);
 
         // this usually means that the other two in this group go back to default
-        for(QPushButton* thisButton : { manualTunerModeButton, bypassTunerButton}) {
+        for(QPushButton* thisButton : { manualTunerModeButton, bypassTunerButton }) {
             pal = thisButton->palette();
             pal.setColor(QPalette::Button, defaultButtonBackground);
             thisButton->setAutoFillBackground(true);
@@ -161,7 +215,7 @@ void WindowMain::slotSetManual() {
         manualTunerModeButton->setPalette(pal);
 
         // this usually means that the other two in this group go back to default
-        for(QPushButton* thisButton : { autoTunerModeButton, bypassTunerButton}) {
+        for(QPushButton* thisButton : { autoTunerModeButton, bypassTunerButton }) {
             pal = thisButton->palette();
             pal.setColor(QPalette::Button, defaultButtonBackground);
             thisButton->setAutoFillBackground(true);

@@ -164,6 +164,21 @@ bool CommLink::tunerSync() {
     return false;
 }
 
+// we will override the timeout for these next two methods, because tuning can take several seconds
+QString CommLink::doMemoryTune() {
+    qDebug() << "CommLink::doMemoryTune(): Doing memory tune";
+    buffer = trx(" T", 15000);
+    qDebug() << "CommLink::doMemoryTune(): Response:" << buffer;
+    return buffer;
+}
+
+QString CommLink::doFullTune() {
+    qDebug() << "CommLink::doFullTune(): Doing full tune";
+    buffer = trx(" F", 15000);
+    qDebug() << "CommLink::doFullTune(): Response:" << buffer;
+    return buffer;
+}
+
 QString CommLink::setAuto() {
     qDebug() << "CommLink::setAuto(): Setting automatic tuning mode";
     buffer = trx(" C");

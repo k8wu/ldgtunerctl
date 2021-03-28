@@ -30,6 +30,8 @@ class CommLink
 public:
     CommLink(QString serialDevice);
     bool tunerSync();
+    QString doMemoryTune();
+    QString doFullTune();
     QString setAuto();
     QString setManual();
     QString toggleBypass();

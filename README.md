@@ -62,7 +62,7 @@ There is no installation process yet. We're getting there!
 
 ## Running the program
 
-Currently, you can run `ldgtuner` from anywhere in your filesystem. When you first run the program, it will present a list of serial ports and ask you to choose one:
+Currently, you can run `ldgtunerctl` from anywhere in your filesystem. When you first run the program, it will present a list of serial ports and ask you to choose one:
 
 ![Serial port selection window](https://k8wu.me/images/ldgtunerctl-qt-serial_port_selection_window.png)
 

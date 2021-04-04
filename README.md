@@ -1,6 +1,7 @@
 
 
 
+
 # LDG Tuner Control
 
 ## Description
@@ -99,7 +100,22 @@ If all goes well, you will be presented with the main program screen:
 It should be fairly self-explanatory how to use the various buttons on this screen. As you do things like toggle between the two antenna inputs, set Auto or Manual tuning mode, bypass the tuner (which can be turned off by setting the tuner to Auto mode), or tell the tuner to execute a Memory or Full tune, you will see the various statuses and button colors change to indicate what has been done.
 
 
-## Bugs and features
+## Command Line Options
+
+Current command line options as of v0.1.0:
+
+	-h, --help                    Displays help on commandline options.
+	--help-all                    Displays help including Qt specific options.
+	-v, --version                 Displays version information.
+	--debug-print, -p             Write debug output to stdout
+	--debug-file, -f <debugfile>  Write debug output to specified file
+	--conf, -c <conffile>         Specify configuration file to use other than
+																default
+
+You can run `ldgtunerctl -h` to get the most current options for whatever version you are using.
+
+
+## Bugs and Features
 
 All programs are imperfect by design, and `ldgtunerctl` is no exception :) This program is under active development, and here are the features that are planned for the near future:
 * Configuration dialog: This can be managed from the command line, but it would be nice to have a configuration button where settings can be changed while in the program.

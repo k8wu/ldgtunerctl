@@ -1,5 +1,6 @@
 
 
+
 # LDG Tuner Control
 
 ## Description
@@ -60,7 +61,7 @@ For macOS, this process will generate a standard macOS application directory who
 
 For the other operating systems, there is no automated installation process yet. If you want it to be available outside your home directory (or wherever you built it), you can execute the following, since the program runs from a single file:
 
-  # install -m 755 ldgtunerctl /usr/local/bin/ldgtunerctl
+	# install -m 755 ldgtunerctl /usr/local/bin/ldgtunerctl
 
 
 ## Running the program

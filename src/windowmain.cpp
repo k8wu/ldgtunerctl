@@ -283,7 +283,9 @@ void WindowMain::slotShowWindowAbout() {
 void WindowMain::slotShutdown() {
     qDebug() << "WindowMain::slotShutdown(): Function called - writing config and shutting down";
     commLink->close();
-    config->setLastWindowPosition(windowPosition);
+    if(windowPosition.length() == 4) {
+        config->setLastWindowPosition(windowPosition);
+    }
     config->writeConfFile();
     QApplication::instance()->quit();
 }

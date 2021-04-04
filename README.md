@@ -109,8 +109,7 @@ Current command line options as of v0.1.0:
 	-v, --version                 Displays version information.
 	--debug-print, -p             Write debug output to stdout
 	--debug-file, -f <debugfile>  Write debug output to specified file
-	--conf, -c <conffile>         Specify configuration file to use other than
-																default
+	--conf, -c <conffile>         Specify configuration file to use other than default
 
 You can run `ldgtunerctl -h` to get the most current options for whatever version you are using.
 

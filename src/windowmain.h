@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "appconfig.h"
+#include "config.h"
 #include "commlink.h"
 #include "windowabout.h"
 
@@ -40,13 +41,16 @@ class WindowMain : public QWidget
     QLabel* statusLabel;
 
     // variables
+    Config* config;
     QString serialDevice;
+    QVector<qint16> windowPosition;
     CommLink* commLink;
     QColor defaultButtonBackground;
 signals:
     void sigShowWindowAbout();
 public:
     explicit WindowMain(QWidget* parent = nullptr);
+    void setWindowPosition(QVector<qint16> thisWindowPosition);
 public slots:
     void slotGetSerialDevice(QString chosenSerialDevice);
     void slotShowWindowMain();

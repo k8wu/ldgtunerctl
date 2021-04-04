@@ -2,7 +2,8 @@
 
 WindowMain::WindowMain(QWidget* parent) : QWidget(parent)
 {
-    qDebug() << "WindowMain::WindowMain(): Initializing object instance";
+    qDebug() << "WindowMain::WindowMain(): Initializing object instance - loading global config object";
+    config = &Config::getInstance();
 
     // containing window properties
     qDebug() << "WindowMain::WindowMain(): Setting up main window";
@@ -113,6 +114,21 @@ WindowMain::WindowMain(QWidget* parent) : QWidget(parent)
     connect(antennaToggleButton, SIGNAL(clicked()), this, SLOT(slotToggleAntenna()));
 }
 
+void WindowMain::setWindowPosition(QVector<qint16> thisWindowPosition) {
+    if(thisWindowPosition.length() == 4) {
+        int x = thisWindowPosition.at(0);
+        int y = thisWindowPosition.at(1);
+        int width = thisWindowPosition.at(2);
+        int height = thisWindowPosition.at(3);
+        setGeometry(x, y, width, height);
+        windowPosition = thisWindowPosition;
+        qDebug() << "WindowMain::slotGetWindowPosition(): Window position successfully set:" << x << y << width << height;
+    }
+    else {
+        qDebug() << "WindowMain::slotGetWindowPosition(): Failed to set window position";
+    }
+}
+
 void WindowMain::slotGetSerialDevice(QString chosenSerialDevice) {
     qDebug() << "WindowMain::slotGetSerialDevice(): Receiving serial device selection";
     this->serialDevice = chosenSerialDevice;
@@ -127,6 +143,16 @@ void WindowMain::slotShowWindowMain() {
     if(commLink->tunerSync()) {
         qDebug() << "WindowMain::slotShowWindowMain(): Tuner synced, updating status";
         statusLabel->setText("Tuner synced");
+
+        // write this into the configuration if it was not loaded from the config file already
+        if(!config->getConfigLoadedFromFile()) {
+            qDebug() << "WindowMain::slotShowWindowMain(): Copying known good serial device to config object";
+            config->setSerialDevice(serialDevice);
+            qDebug() << "WIndowMain::slotShowWindowMain(): Copying window position data to config object";
+            config->setLastWindowPosition(geometry().left(), geometry().top(), geometry().width(), geometry().height());
+            qDebug() << "WindowMain::slotShowWindowMain(): Writing config out now to file: " << config->getConfFileName();
+            config->writeConfFile();
+        }
     }
     else {
         qDebug() << "WindowMain::slotShowWindowMain(): Tuner not synced, updating status";
@@ -255,7 +281,9 @@ void WindowMain::slotShowWindowAbout() {
 }
 
 void WindowMain::slotShutdown() {
-    qDebug() << "WindowMain::slotShutdown(): Function called, shutting down";
+    qDebug() << "WindowMain::slotShutdown(): Function called - writing config and shutting down";
     commLink->close();
+    config->setLastWindowPosition(windowPosition);
+    config->writeConfFile();
     QApplication::instance()->quit();
 }

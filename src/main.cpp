@@ -3,9 +3,11 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QFile>
+#include <QDir>
 #include <iostream>
 
 #include "appconfig.h"
+#include "config.h"
 #include "windowselectdevice.h"
 #include "windowmain.h"
 #include "windowabout.h"
@@ -13,7 +15,7 @@
 // global defaults
 QString debugFile;
 bool debugShow = false;
-QString confFile = "~/.config/ldgtunerctl.conf";
+QString confFile = QDir::homePath() + "/.config/ldgtunerctl.conf";
 
 void debugMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& str) {
     QString logLevel;
@@ -83,6 +85,12 @@ int main(int argc, char **argv) {
         confFile = parser.value(confOption);
     }
 
+    // set up config instance
+    Config* config = &Config::getInstance();
+    if(!config->parseConfFile(confFile)) {
+        qDebug() << "main(): Could not parse config file (or it doesn't exist)";
+    }
+
     // initialize all windows, but don't show anything yet
     qDebug() << "main(): Initializing WindowSelectDevice";
     WindowSelectDevice* windowSelectDevice = new WindowSelectDevice();
@@ -97,9 +105,17 @@ int main(int argc, char **argv) {
     QObject::connect(windowSelectDevice, SIGNAL(sigShowWindowMain()), windowMain, SLOT(slotShowWindowMain()));
     QObject::connect(windowMain, SIGNAL(sigShowWindowAbout()), windowAbout, SLOT(show()));
 
-    // start by showing the device selection window
-    qDebug() << "main(): Showing WindowSelectDevice";
-    windowSelectDevice->show();
+    // if config is loaded successfully, go straight to the main window
+    if(config->getConfigLoadedFromFile()) {
+        qDebug() << "main(): Config was loaded - showing WindowMain";
+        windowMain->slotGetSerialDevice(config->getSerialDevice());
+        windowMain->setWindowPosition(config->getLastWindowPosition());
+        windowMain->slotShowWindowMain();
+    }
+    else {
+        qDebug() << "main(): Config was not loaded - showing WindowSelectDevice";
+        windowSelectDevice->show();
+    }
 
     // loop and/or exit
     qDebug() << "main(): Looping";

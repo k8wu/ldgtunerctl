@@ -49,20 +49,23 @@ This will install Qt 6.x, which should be fine, but if you want to force 5.x, us
 
 ## Compilation
 
-This program is known to compile using `clang++` on FreeBSD and macOS. It may not work using `g++` on Linux due to the issue with finding the libusb and/or libserialport libraries.
+This program is known to compile using `clang++` on FreeBSD and macOS, and using `g++` on Linux. You should be able to execute the following to get `ldgtunerctl` built and installed:
 
-In any case, you should simply be able to execute the following to get `ldgtunerctl` built:
-
-	$ git clone https://github.com/k8wu/ldgtunerctl && cd ldgtunerctl
-	$ qmake
+	$ git clone https://github.com/k8wu/ldgtunerctl
+  $ mkdir build-ldgtunerctl && cd build-ldgtunerctl
+	$ qmake ../ldgtunerctl
 	$ make -j4 # change the number if you have more or fewer logical CPU cores available
 
-There is no installation process yet. We're getting there!
+For macOS, this process will generate a standard macOS application directory whose name ends in .app, so you can run it directly from Finder (optionally copying it to your `/Applications` directory). Please note that on ARM based Macs (M1, and likely other Apple silicon chips in the future), you may have to grant permission to run unsigned applications (if you can even run them at all). Addressing this issue will cost me $100/year, so I am saving that for when this application is "production ready" :)
+
+For the other operating systems, there is no automated installation process yet. If you want it to be available outside your home directory (or wherever you built it), you can execute the following, since the program runs from a single file:
+
+  # install -m 755 ldgtunerctl /usr/local/bin/ldgtunerctl
 
 
 ## Running the program
 
-Currently, you can run `ldgtunerctl` from anywhere in your filesystem. When you first run the program, it will present a list of serial ports and ask you to choose one:
+Currently, as stated above, you can run `ldgtunerctl` from anywhere in your filesystem. When you first run the program, it will present a list of serial ports and ask you to choose one:
 
 ![Serial port selection window](https://k8wu.me/images/ldgtunerctl-qt-serial_port_selection_window.png)
 

@@ -53,7 +53,7 @@ This will install Qt 6.x, which should be fine, but if you want to force 5.x, us
 This program is known to compile using `clang++` on FreeBSD and macOS, and using `g++` on Linux. You should be able to execute the following to get `ldgtunerctl` built and installed:
 
 	$ git clone https://github.com/k8wu/ldgtunerctl
-  $ mkdir build-ldgtunerctl && cd build-ldgtunerctl
+	$ mkdir build-ldgtunerctl && cd build-ldgtunerctl
 	$ qmake ../ldgtunerctl
 	$ make -j4 # change the number if you have more or fewer logical CPU cores available
 

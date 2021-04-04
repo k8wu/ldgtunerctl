@@ -78,16 +78,16 @@ WindowMain::WindowMain(QWidget* parent) : QWidget(parent)
     otherControlsBox->setGeometry(360, 210, 300, 125);
     otherControlsBox->setFont(headingFont);
 
-    configButton = new QPushButton("Config", otherControlsBox);
-    configButton->setGeometry(10, 70, 70, 40);
-    configButton->setFont(normalFont);
+    //configButton = new QPushButton("Config", otherControlsBox);
+    //configButton->setGeometry(10, 70, 70, 40);
+    //configButton->setFont(normalFont);
 
     aboutButton = new QPushButton("About", otherControlsBox);
-    aboutButton->setGeometry(115, 70, 70, 40);
+    aboutButton->setGeometry(60, 70, 70, 40);
     aboutButton->setFont(normalFont);
 
     exitButton = new QPushButton("Exit", otherControlsBox);
-    exitButton->setGeometry(220, 70, 70, 40);
+    exitButton->setGeometry(180, 70, 70, 40);
     exitButton->setFont(normalFont);
 
     statusBox = new QGroupBox("Status", this);

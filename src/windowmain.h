@@ -34,7 +34,7 @@ class WindowMain : public QWidget
     QLabel* antennaSelectionDataLabel;
     QPushButton* antennaToggleButton;
     QGroupBox* otherControlsBox;
-    QPushButton* configButton;
+    //QPushButton* configButton;
     QPushButton* aboutButton;
     QPushButton* exitButton;
     QGroupBox* statusBox;

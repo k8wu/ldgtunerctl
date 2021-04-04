@@ -20,15 +20,8 @@ HEADERS += \
     src/windowmain.h \
     src/windowselectdevice.h
 
-INCLUDEPATH += \
-    /usr/include \
-    /usr/local/include
-
-QMAKE_LIBDIR += \
-    /usr/lib \
-    /usr/local/lib
-
-QMAKE_LIBDIR_FLAGS += \
-    -lserialport \
-    -lusb
-s
+unix:!macx: CONFIG += link_pkgconfig
+unix:!macx: PKGCONFIG += libserialport
+macx: INCLUDEPATH += /usr/local/include
+macx: LIBS += -L/usr/local/lib -lserialport -lusb
+freebsd: PKGCONFIG += libusb-1.0

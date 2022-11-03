@@ -10,7 +10,7 @@ This program controls several aspects of the LDG AT-1000ProII and AT-600ProII au
 
 The reason for this program's existence is that LDG offers a Windows executable for controlling the tuner, but has nothing similar available for Linux or any other operating system. Some amateur radio operators (myself included) use Linux primarily in the shack, so now we don't have to resort to running Wine or some other stopgap solution.
 
-This program is built on C++ using Qt. It is hoped that it will eventually run on most flavors of Linux and *BSD. It is mainly developed on a FreeBSD system, but tested on FreeBSD, Linux, and macOS.
+This program is built on C++ using Qt. It has been tested on FreeBSD, Linux, macOS, and now Windows (11, but anything back to 7 should work).
 
 
 ## Hardware
@@ -20,23 +20,19 @@ Aside from the tuner itself, an FTDI interface cable is required. Details can be
 
 ## Dependencies
 
-* Qt 5.x or later
-* libserialport
-* libusb
+* Qt 5.x or later (Qt 6.x will work as well)
 
 ### Linux (Debian and Debian-Style Systems)
 
 You can install these on Debian or Debian-style Linux systems (Ubuntu, Mint, Devuan, etc.) by issuing this command:
 
-	# sudo apt install git qtbase5-dev libserialport-dev
-
-There may be some issues with `ld` not being able to locate some libraries. That will be resolved in a future commit.
+	# sudo apt install git qtbase5-dev
 
 ### FreeBSD
 
 On FreeBSD, you can use the following command to get the necessary packages installed:
 
-	# pkg install git qt5 libserialport
+	# pkg install git qt5
 
 Alternately, you can use ports to compile these packages yourself.
 
@@ -44,30 +40,30 @@ Alternately, you can use ports to compile these packages yourself.
 
 Using Homebrew, you can execute the following commands to install the dependencies:
 
-	% brew install qt libserialport
+	% brew install qt
 
 This will install Qt 6.x, which should be fine, but if you want to force 5.x, use `qt@5` in the preceding command instead of `qt`.
 
 
 ## Compilation
 
-This program is known to compile using `clang++` on FreeBSD and macOS, and using `g++` on Linux. You should be able to execute the following to get `ldgtunerctl` built and installed:
+This program is known to compile using `g++` or `clang++` on Linux, `clang++` on FreeBSD and macOS, and the Microsoft Visual Studio Build Tools C/C++ compiler (`cl.exe`) on Windows (though Clang or GCC should be fine there, too, if you have either). You should be able to execute the following to get `ldgtunerctl` built and installed on a Linux, FreeBSD, or macOS system:
 
 	$ git clone https://github.com/k8wu/ldgtunerctl
 	$ mkdir build-ldgtunerctl && cd build-ldgtunerctl
-	$ qmake ../ldgtunerctl
+	$ cmake ../ldgtunerctl
 	$ make -j4 # change the number if you have more or fewer logical CPU cores available
 
-For macOS, this process will generate a standard macOS application directory whose name ends in .app, so you can run it directly from Finder (optionally copying it to your `/Applications` directory). Please note that on ARM based Macs (M1, and likely other Apple silicon chips in the future), you may have to grant permission to run unsigned applications (if you can even run them at all). Addressing this issue will cost me $100/year, so I am saving that for when this application is "production ready" :)
+You can use whatever system generator you have by specifying it on the `cmake` command line (I prefer Ninja, in which case I use `-GNinja` as the first argument to `cmake`).
 
-For the other operating systems, there is no automated installation process yet. If you want it to be available outside your home directory (or wherever you built it), you can execute the following, since the program runs from a single file:
+For macOS, this process will generate a standard macOS application directory whose name ends in .app, so you can run it directly from Finder without installation if you want. Please note that on ARM based Macs (M1, and likely other Apple silicon chips in the future), you may have to grant permission to run unsigned applications (if you can even run them at all). Addressing this issue will cost me $100/year, so I am saving that for when this application is "production ready" :)
 
-	# install -m 755 ldgtunerctl /usr/local/bin/ldgtunerctl
+Installation is handled using whatever system generator you used when you configured the build process with `cmake`. Please note that you will often need elevated permissions to install the program to the default directory, which is usually `/usr/local/bin` on POSIX-compliant systems, `/Applications` on macOS, and `C:\Program Files` or `C:\Program Files (x86)` on Windows.
 
 
 ## Running the program
 
-Currently, as stated above, you can run `ldgtunerctl` from anywhere in your filesystem. When you first run the program, it will present a list of serial ports and ask you to choose one:
+Currently, as stated above, you can run `ldgtunerctl[.exe]` from anywhere in your filesystem, or from the Applications folder if you installed it in macOS. When you first run the program, it will present a list of serial ports and ask you to choose one:
 
 ![Serial port selection window](https://k8wu.me/images/ldgtunerctl-qt-serial_port_selection_window.png)
 
@@ -81,14 +77,14 @@ If it does not, it is likely that you do not have permission to read and/or writ
 
 	# pw groupmod dialer -m $(id -un)
 
-### macOS
+### macOS/Windows
 
 This step should not be required.
 
 
 ## Configuring the Program
 
-If you select a serial port and `ldgtunerctl` is able to successfully communicate with and configure the tuner, it will save a configuration file in your user profile directory (usually `${HOME}/.config/ldgtunerctl.conf`). On subsequent startups, it will automatically read this file (absent of any command line options to the contrary) and attempt to use the same serial port that is specified in that configuration file. If you run into any issues, you can either delete that file, or specify a different one using the `-c` command line option.
+If you select a serial port and `ldgtunerctl` is able to successfully communicate with and configure the tuner, it will save a configuration file in your user profile directory (usually `${HOME}/.config/ldgtunerctl.conf` on POSIX compliant operating systems and macOS, and `%USERPROFILE%\.config` on Windows). On subsequent startups, it will automatically read this file (absent of any command line options to the contrary) and attempt to use the same serial port that is specified in that configuration file. If you run into any issues, you can either delete that file, or specify a different one using the `-c` command line option.
 
 
 ## Basic Operation
@@ -119,4 +115,4 @@ You can run `ldgtunerctl -h` to get the most current options for whatever versio
 All programs are imperfect by design, and `ldgtunerctl` is no exception :) This program is under active development, and here are the features that are planned for the near future:
 * Configuration dialog: This can be managed from the command line, but it would be nice to have a configuration button where settings can be changed while in the program.
 * Meter polling: This is an undocumented feature in the microcontroller for the AT-1000ProII and AT-600ProII tuners, but it can - in theory - be used to get a rough idea of how much power is going through the tuner, how much is being reflected, and what band/frequency has been detected. Of course, we can use some of this data to calculate SWR, R+j|X| impedance figure, return loss, etc. However, I will have to implement this before I know more, and the other tuner projects that I was able to find will guide me on this (namely, [/Efpophis/LDGControl](https://github.com/Efpophis/LDGControl)).
-* Windows support?
+* Windows is now supported. Very limited testing has been done in this space, but everything so far seems to work.

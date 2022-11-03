@@ -11,7 +11,7 @@ set(CMAKE_AUTOMOC ON)
 include(GNUInstallDirs)
 
 find_package(QT NAMES Qt5 Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Gui)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Gui Serialport)
 find_package(Qt${QT_VERSION_MAJOR} OPTIONAL_COMPONENTS Widgets)
 
 qt_add_executable(ldgtunerctl WIN32 MACOSX_BUNDLE
@@ -26,28 +26,13 @@ qt_add_executable(ldgtunerctl WIN32 MACOSX_BUNDLE
 target_link_libraries(ldgtunerctl PRIVATE
     Qt::Core
     Qt::Gui
+    Qt::SerialPort
 )
 
 if((QT_VERSION_MAJOR GREATER 4))
     target_link_libraries(ldgtunerctl PRIVATE
         Qt::Widgets
     )
-endif()
-
-# libserialport does not have a CMake file to help us, so we'll use pkg-config first
-find_package(PkgConfig)
-if(PKG_CONFIG_FOUND)
-    pkg_check_modules(LIBSERIALPORT_PREFIX serialport)
-endif()
-
-# if that fails, then hope we have an override
-if(NOT DEFINED LIBSERIALPORT_PREFIX)
-    message(FATAL_ERROR "ERROR: libserialport not found! Please define LIBSERIALPORT_PREFIX with the directory that contains these files.")
-else()
-    message(STATUS "libserialport found at ${LIBSERIALPORT_PREFIX}")
-    target_include_directories(ldgtunerctl PRIVATE ${LIBSERIALPORT_PREFIX}/include)
-    target_link_directories(ldgtunerctl PRIVATE ${LIBSERIALPORT_PREFIX}/lib)
-    target_link_libraries(ldgtunerctl PRIVATE serialport)
 endif()
 
 install(TARGETS ldgtunerctl

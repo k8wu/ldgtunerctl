@@ -8,78 +8,54 @@ CommLink::CommLink(QString serialDevice)
 
 bool CommLink::setup() {
     // internal method variables
-    int res;
-    char readBuffer[40];
-    rxEventSet = (struct sp_event_set*) malloc(sizeof(rxEventSet));
-    txEventSet = (struct sp_event_set*) malloc(sizeof(txEventSet));
-
-    // setup for detecting when it's fine to write and/or read
-    sp_new_event_set(&rxEventSet);
-    sp_new_event_set(&txEventSet);
+    QString readBuffer;
 
     // define the port object
-    res = sp_get_port_by_name(serialDevice.toStdString().c_str(), &serialPort);
-    if(res < 0) {
+    this->serialPort.setPortName(serialDevice);
+    if(this->serialPort.error() != QSerialPort::NoError) {
         qDebug() << "CommLink::setup(): Failed to get" << this->serialDevice << "referenced by name";
         return false;
     }
 
     // open the port
-    res = sp_open(serialPort, SP_MODE_READ_WRITE);
-    if(res < 0) {
-        qDebug() << "CommLink::setup(): Failed to open:" << sp_last_error_message() << "(" << res << ")";
-        sp_free_port(serialPort);
+    this->serialPort.open(QIODevice::ReadWrite);
+    if(this->serialPort.error() != QSerialPort::NoError) {
+        qDebug() << "CommLink::setup(): Failed to open:" << this->serialDevice << "(" << this->serialPort.error() << ")";
+        this->serialPort.close();
         return false;
     }
 
     // flush buffers and do a throwaway read just to be sure
-    res = sp_flush(serialPort, SP_BUF_BOTH);
-    if(res < 0) {
+    serialPort.flush();
+    if(this->serialPort.error() != QSerialPort::NoError) {
         qDebug() << "CommLink::setup(): Failed to flush buffers";
-        sp_close(serialPort);
-        sp_free_port(serialPort);
+        this->serialPort.close();
         return false;
     }
-    sp_nonblocking_read(serialPort, readBuffer, sizeof(readBuffer));
-    memset(readBuffer, 0, sizeof(readBuffer));
-    qDebug() << "CommLink::setup(): Flushed buffers," << sp_input_waiting(serialPort) << "input bytes," << sp_output_waiting(serialPort) << "output bytes remaining";
+    readBuffer = this->serialPort.read(40);
+    readBuffer.clear();
+    qDebug() << "CommLink::setup(): Flushed buffers," << this->serialPort.bytesAvailable() << "input bytes," << this->serialPort.bytesToWrite() << "output bytes remaining";
 
     // set up the port
-    res = sp_set_baudrate(serialPort, 38400);
-    if(res < 0) {
-        qDebug() << "CommLink::setup(): Could not set baud rate to 38400 (" << sp_last_error_message() << ")";
+    this->serialPort.setBaudRate(QSerialPort::Baud38400);
+    if(this->serialPort.error() != QSerialPort::NoError) {
+        qDebug() << "CommLink::setup(): Could not set baud rate to 38400 (" << this->serialPort.error() << ")";
     }
-    res = sp_set_bits(serialPort, 8);
-    if(res < 0) {
-        qDebug() << "CommLink::setup(): Could not set data bits to 8 (" << sp_last_error_message() << ")";
+    this->serialPort.setDataBits(QSerialPort::Data8);
+    if(this->serialPort.error() != QSerialPort::NoError) {
+        qDebug() << "CommLink::setup(): Could not set data bits to 8 (" << this->serialPort.error() << ")";
     }
-    res = sp_set_parity(serialPort, SP_PARITY_NONE);
-    if(res < 0) {
-        qDebug() << "CommLink::setup(): Could not set parity to NONE (" << sp_last_error_message() << ")";
+    this->serialPort.setParity(QSerialPort::NoParity);
+    if(this->serialPort.error() != QSerialPort::NoError) {
+        qDebug() << "CommLink::setup(): Could not set parity to NONE (" << this->serialPort.error() << ")";
     }
-    res = sp_set_stopbits(serialPort, 1);
-    if(res < 0) {
-        qDebug() << "CommLink::setup(): Could not set stop bits to 1 (" << sp_last_error_message() << ")";
+    this->serialPort.setStopBits(QSerialPort::OneStop);
+    if(this->serialPort.error() != QSerialPort::NoError) {
+        qDebug() << "CommLink::setup(): Could not set stop bits to 1 (" << this->serialPort.error() << ")";
     }
-    res = sp_set_flowcontrol(serialPort, SP_FLOWCONTROL_NONE);
-    if(res < 0) {
-        qDebug() << "CommLink::setup(): Could not set flow control to NONE (" << sp_last_error_message() << ")";
-    }
-
-    res = sp_add_port_events(rxEventSet, serialPort, SP_EVENT_RX_READY);
-    if(res < 0) {
-        qDebug() << "CommLink::setup(): Could not set receive event mask";
-        sp_close(serialPort);
-        sp_free_port(serialPort);
-        return false;
-    }
-
-    res = sp_add_port_events(txEventSet, serialPort, SP_EVENT_TX_READY);
-    if(res < 0) {
-        qDebug() << "CommLink::setup(): Could not set transmit event mask";
-        sp_close(serialPort);
-        sp_free_port(serialPort);
-        return false;
+    this->serialPort.setFlowControl(QSerialPort::NoFlowControl);
+    if(this->serialPort.error() != QSerialPort::NoError) {
+        qDebug() << "CommLink::setup(): Could not set flow control to NONE (" << this->serialPort.error() << ")";
     }
 
     qDebug() << "CommLink::setup(): Serial port setup complete";
@@ -88,54 +64,51 @@ bool CommLink::setup() {
 
 // rxTimeout is in ms
 QString CommLink::trx(QString command, unsigned int rxTimeout) {
-    char readBuffer[40];
-    int res;
+    QString readBuffer;
+    qint64 res;
     int rxBytesWaiting;
 
     // do a dummy read, then clear buffers
-    sp_nonblocking_read(serialPort, readBuffer, sizeof(readBuffer));
-    memset(readBuffer, 0, sizeof(readBuffer));
-    buffer.clear();
-    qDebug() << "CommLink::trx(): Cleared buffers," << sp_output_waiting(serialPort) << "output," << sp_input_waiting(serialPort) << "input remaining";
+    readBuffer = this->serialPort.read(40);
+    readBuffer.clear();
+    this->buffer.clear();
+    qDebug() << "CommLink::trx(): Cleared buffers," << this->serialPort.bytesAvailable() << "output," << this->serialPort.bytesToWrite() << "input remaining";
 
     qDebug() << "CommLink::trx(): Writing command" << command;
-    for(QChar c : command) {
-        qDebug() << "CommLink::trx(): Waiting 100 ms to write next byte";
-        usleep(100000);
-        qDebug() << "CommLink::trx(): Writing character with a wait up to 100 ms";
-        res = sp_blocking_write(serialPort, &c, 1, 100);
-        if(res < 0) {
+    for(QString c : command) {
+        qDebug() << "CommLink::trx(): Writing character and waiting up to 100 ms for it to go through";
+        this->serialPort.write(c.toStdString().c_str());
+        this->serialPort.waitForBytesWritten(100);
+        if(this->serialPort.error() != QSerialPort::NoError) {
             qDebug() << "CommLink::trx(): Failed to write character";
             return "";
         }
-        sp_drain(serialPort);
         qDebug() << "CommLink::trx(): Wrote character:" << c;
     }
     qDebug() << "CommLink::trx(): Wrote command - now waiting up to" << rxTimeout << "ms for receive data";
 
-    sp_wait(rxEventSet, rxTimeout);
-    rxBytesWaiting = sp_input_waiting(serialPort);
-    if(rxBytesWaiting == 0) {
+    this->serialPort.waitForReadyRead(rxTimeout);
+    if(this->serialPort.bytesAvailable() == 0) {
         qDebug() << "CommLink::trx(): No RX bytes waiting";
     }
     else {
-        qDebug() << "CommLink::trx():" << rxBytesWaiting << "receive bytes waiting";
+        qDebug() << "CommLink::trx():" << this->serialPort.bytesAvailable() << "receive bytes waiting";
         do {
-            res = sp_nonblocking_read(serialPort, readBuffer, sizeof(readBuffer));
-            if(res < 0) {
+            readBuffer = this->serialPort.read(40);
+            if(this->serialPort.error() != QSerialPort::NoError) {
                 qDebug() << "CommLink::trx(): Failed to read";
                 return "";
             }
-            else if(res == 0) {
+            else if(readBuffer.length() == 0) {
                 qDebug() << "CommLink::trx(): No more bytes to read";
             }
-            qDebug() << "CommLink::trx(): Read" << res << "byte(s):" << readBuffer;
-            buffer.append(readBuffer);
-            memset(readBuffer, 0, sizeof(readBuffer));
-        } while(sp_input_waiting(serialPort) > 0);
+            qDebug() << "CommLink::trx(): Read" << readBuffer.length() << "byte(s):" << readBuffer;
+            this->buffer.append(readBuffer);
+            readBuffer.clear();
+        } while(this->serialPort.bytesAvailable() > 0);
     }
-    qDebug() << "CommLink::trx(): Total read buffer:" << buffer;
-    return buffer;
+    qDebug() << "CommLink::trx(): Total read buffer:" << this->buffer;
+    return this->buffer;
 }
 
 bool CommLink::tunerSync() {
@@ -214,27 +187,15 @@ QString CommLink::toggleAntenna() {
 }
 
 void CommLink::close() {
-    sp_free_event_set(rxEventSet);
-    sp_free_event_set(txEventSet);
-    sp_close(serialPort);
-    sp_free_port(serialPort);
+    this->serialPort.close();
 }
 
 QStringList CommLink::enumerateDevices() {
-    // get a list of serial devices that we can use
+    // quick and easy enumeration
     QStringList serialPorts;
-    struct sp_port **spList;
-    enum sp_return spResult = sp_list_ports(&spList);
-    if(spResult != SP_OK) {
-        qDebug() << "CommLink::enumerateDevices(): Failed to list ports";
-        return {};
-    }
-
-    // go through them and put them into the string list
-    for(int i = 0; spList[i] != NULL; i++) {
-        struct sp_port *spPort = spList[i];
-        char *spPortName = sp_get_port_name(spPort);
-        serialPorts.append(spPortName);
+    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
+        qDebug() << "CommLink::enumerateDevices(): Added serial port: " << info.portName();
+        serialPorts.append(info.portName());
     }
 
     return serialPorts;

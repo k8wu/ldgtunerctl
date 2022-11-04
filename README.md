@@ -58,16 +58,12 @@ You can use whatever system generator you have by specifying it on the `cmake` c
 
 For macOS, this process will generate a standard macOS application directory whose name ends in .app, so you can run it directly from Finder without installation if you want. Please note that on ARM based Macs (M1, and likely other Apple silicon chips in the future), you may have to grant permission to run unsigned applications (if you can even run them at all). Addressing this issue will cost me $100/year, so I am saving that for when this application is "production ready" :)
 
-Installation is handled using whatever system generator you used when you configured the build process with `cmake`. Please note that you will often need elevated permissions to install the program to the default directory, which is usually `/usr/local/bin` on POSIX-compliant systems, `/Applications` on macOS, and `C:\Program Files` or `C:\Program Files (x86)` on Windows.
+Installation is handled using whatever system generator you used when you configured the build process with `cmake`. Please note that you will often need elevated permissions to install the program to the default directory, which is usually `/usr/local/bin` on POSIX-compliant systems, and `C:\Program Files` or `C:\Program Files (x86)` on Windows.
 
 
 ## Running the program
 
-Currently, as stated above, you can run `ldgtunerctl[.exe]` from anywhere in your filesystem, or from the Applications folder if you installed it in macOS. When you first run the program, it will present a list of serial ports and ask you to choose one:
-
-![Serial port selection window](https://k8wu.me/images/ldgtunerctl-qt-serial_port_selection_window.png)
-
-If it does not, it is likely that you do not have permission to read and/or write to serial ports. An easy way around this on the various systems is:
+Currently, as stated above, you can run `ldgtunerctl[.exe]` from anywhere in your filesystem, or from the Applications folder if you installed it in macOS. When you first run the program, it will present a list of serial ports and ask you to choose one. If it does not, it is likely that you do not have permission to read and/or write to serial ports. An easy way around this on the various systems is:
 
 ### Linux (Debian, etc.)
 
@@ -89,16 +85,12 @@ If you select a serial port and `ldgtunerctl` is able to successfully communicat
 
 ## Basic Operation
 
-If all goes well, you will be presented with the main program screen:
-
-![Main window](https://k8wu.me/images/ldgtunerctl-qt-main_window.png)
-
-It should be fairly self-explanatory how to use the various buttons on this screen. As you do things like toggle between the two antenna inputs, set Auto or Manual tuning mode, bypass the tuner (which can be turned off by setting the tuner to Auto mode), or tell the tuner to execute a Memory or Full tune, you will see the various statuses and button colors change to indicate what has been done.
+If all goes well, you will be presented with the main program screen. It should be fairly self-explanatory how to use the various buttons on this screen. As you do things like toggle between the two antenna inputs, set Auto or Manual tuning mode, bypass the tuner (which can be turned off by setting the tuner to Auto mode), or tell the tuner to execute a Memory or Full tune, you will see the various statuses and button colors change to indicate what has been done.
 
 
 ## Command Line Options
 
-Current command line options as of v0.1.0:
+Current command line options:
 
 	-h, --help                    Displays help on commandline options.
 	--help-all                    Displays help including Qt specific options.

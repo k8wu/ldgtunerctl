@@ -6,7 +6,7 @@
 #define APPCONFIG_H
 
 #define PROGRAM_TITLE "LDG Tuner Control"
-#define PROGRAM_VERSION "0.1.0"
+#define PROGRAM_VERSION "0.2.0pre1"
 #define PROGRAM_AUTHOR "Mike Phipps"
 #define PROGRAM_AUTHOR_CALLSIGN "K8WU"
 #define PROGRAM_AUTHOR_EMAIL "qrz(at)k8wu.me"

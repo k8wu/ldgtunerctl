@@ -11,7 +11,7 @@ set(CMAKE_AUTOMOC ON)
 include(GNUInstallDirs)
 
 find_package(QT NAMES Qt5 Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Gui Serialport)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Gui SerialPort)
 find_package(Qt${QT_VERSION_MAJOR} OPTIONAL_COMPONENTS Widgets)
 
 qt_add_executable(ldgtunerctl WIN32 MACOSX_BUNDLE
